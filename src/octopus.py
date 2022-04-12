@@ -12,12 +12,6 @@ import torch.optim as optim
 
 torch.manual_seed(1)
 
-def hello():
-    print("Hello, Octopus!")
-
-def cameron_dev():
-    print("Cameron has set up his branch")
-
 class BaselineNet(nn.Module):
     """
     Baseline FF Neural Network to predict if an article is real or fake
