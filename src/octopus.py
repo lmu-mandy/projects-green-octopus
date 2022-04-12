@@ -12,7 +12,7 @@ import torch.optim as optim
 
 torch.manual_seed(1)
 
-class BaselineNet(nn.Module):
+class FFNet(nn.Module):
     """
     Baseline FF Neural Network to predict if an article is real or fake
     based on the content of the article
@@ -47,7 +47,7 @@ def preprocess_data(df):
     """
     labels = df['label']
     data = df['text'] # excluded title, subject, and date for the moment
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.33, random_state=123)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.33)
     return X_train, X_test, y_train, y_test
 
 
@@ -69,7 +69,7 @@ def main(args):
     word_to_ix = load_vocab(X_train)
 
     # Build the model
-    model = BaselineNet(len(word_to_ix) + 1, args.embed_dim, 1)
+    model = FFNet(len(word_to_ix) + 1, args.embed_dim, 1)
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     loss_fn = nn.BCELoss()
 
