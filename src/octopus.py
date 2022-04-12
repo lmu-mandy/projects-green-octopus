@@ -135,4 +135,17 @@ def main(args):
         print(report)
 
 if __name__ == "__main__":
-    hello()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--data_file', default='data/labeled_data.p')
+    parser.add_argument('--learning_rate', type=float, default=0.001, help='Learning rate for gradient descent.')
+    parser.add_argument('--lowercase', action='store_true', help='Whether to make all text lowercase.')
+    parser.add_argument('--pretrained', action='store_true', help='Whether to load pre-trained word embeddings.')
+    parser.add_argument('--embed_dim', type=int, default=32, help='Default embedding dimension.')
+    parser.add_argument('--hidden_dim', type=int, default=32, help='Default hidden layer dimension.')
+    parser.add_argument('--batch_size', type=int, default=16, help='Default number of examples per minibatch.')
+    parser.add_argument('--epochs', type=int, default=8, help='Number of training epochs.')
+    parser.add_argument('--model', default='ff', choices=['ff', 'lstm'])
+
+    args = parser.parse_args()
+    main(args)
