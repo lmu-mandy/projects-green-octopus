@@ -1,2 +1,4 @@
 pytorch
 pandas
+sklearn
+numpy
