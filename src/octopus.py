@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
 import torch
+import re
 import torch.nn as nn
 import torch.optim as optim
 
@@ -46,7 +47,7 @@ def preprocess_data(df):
     Randomize and split data into train and test sets
     """
     labels = df['label']
-    data = df['text'] # excluded title, subject, and date for the moment
+    data = df['title'].apply(clean_text) # excluded title, subject, and date for the moment
     X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.33)
     return X_train, X_test, y_train, y_test
 
@@ -58,6 +59,10 @@ def load_vocab(df):
         for word in text.split():
             word_to_ix.setdefault(word, len(word_to_ix) + 1)
     return word_to_ix
+
+
+def clean_text(text):
+    return re.sub('[^a-zA-Z0-9\s]', '', text).lower()
 
 def main(args):
 
@@ -111,12 +116,11 @@ def main(args):
                 continue
 
             # sets unknown keys/tokens to 0
-            text_data = [word_to_ix[text[ix]] if text[ix] in word_to_ix.keys() else 0 for ix in range(len(text))] 
+            text_data = [word_to_ix[text[ix]] if text[ix] in word_to_ix.keys() else 0 for ix in range(len(text))]
             x = torch.LongTensor([text_data])
             true_y.append(label)
 
             pred_y = model(x)
-            
             # Model returns likelihood of 0 or 1 so round to find actual value
             pred_y_test.append(torch.round(pred_y).item())
 
