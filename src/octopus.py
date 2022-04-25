@@ -35,6 +35,12 @@ def load_data():
     """
     Read and load in True and Fake news article data (structured as CSVs)
     Gives combined dataset with a labels row signifying 0 - true, 1 - fake
+
+        Params: 
+            None
+
+        Returns: 
+            combined (pd DF): columns - title, text, subject, date, label
     """
     true, fake = pd.read_csv('data/True.csv'), pd.read_csv('data/Fake.csv')
     true = pd.concat([true, pd.Series([0 for i in range(len(true))], name='label')], axis=1)
@@ -45,6 +51,12 @@ def load_data():
 def preprocess_data(df):
     """
     Randomize and split data into train and test sets
+
+        Params:
+            df (pd DF): data returned from load_data()
+
+        Returns:
+            X_train, X_test, y_train, y_test (sklearn train_test_split): randomized and split data
     """
     labels = df['label']
     data = df['title'].apply(clean_text) # excluded title, subject, and date for the moment
@@ -53,7 +65,15 @@ def preprocess_data(df):
 
 
 def load_vocab(df):
-    """Return a dictionary mapping each word to its index in the vocabulary."""
+    """
+    Return a dictionary mapping each word to its index in the vocabulary.
+
+        Params: 
+            df (pd DF): containing text data without labels
+
+        Returns:
+            word_to_ix (dict): vocabulary used for training
+    """
     word_to_ix = {}
     for idx, text in df.items():
         for word in text.split():
@@ -130,15 +150,14 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_file', default='data/labeled_data.p')
     parser.add_argument('--learning_rate', type=float, default=0.001, help='Learning rate for gradient descent.')
-    parser.add_argument('--lowercase', action='store_true', help='Whether to make all text lowercase.')
-    parser.add_argument('--pretrained', action='store_true', help='Whether to load pre-trained word embeddings.')
+    # parser.add_argument('--lowercase', action='store_true', help='Whether to make all text lowercase.')
+    # parser.add_argument('--pretrained', action='store_true', help='Whether to load pre-trained word embeddings.')
     parser.add_argument('--embed_dim', type=int, default=32, help='Default embedding dimension.')
-    parser.add_argument('--hidden_dim', type=int, default=32, help='Default hidden layer dimension.')
-    parser.add_argument('--batch_size', type=int, default=16, help='Default number of examples per minibatch.')
-    parser.add_argument('--epochs', type=int, default=8, help='Number of training epochs.')
-    parser.add_argument('--model', default='ff', choices=['ff', 'lstm'])
+    # parser.add_argument('--hidden_dim', type=int, default=32, help='Default hidden layer dimension.')
+    # parser.add_argument('--batch_size', type=int, default=16, help='Default number of examples per minibatch.')
+    parser.add_argument('--epochs', type=int, default=10, help='Number of training epochs.')
+    # parser.add_argument('--model', default='ff', choices=['ff', 'lstm'])
 
     args = parser.parse_args()
     main(args)
