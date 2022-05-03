@@ -42,6 +42,10 @@ def load_data():
     combined = pd.concat([true, fake], axis=0, ignore_index=True)
     return combined
 
+def preprocess_sentence(sentence):
+    data = clean_text(sentence)
+    return [data]
+
 def preprocess_data(df):
     """
     Randomize and split data into train and test sets
@@ -123,6 +127,7 @@ def main(args):
             pred_y = model(x)
             # Model returns likelihood of 0 or 1 so round to find actual value
             pred_y_test.append(torch.round(pred_y).item())
+            print(pred_y_test)
 
         report = classification_report(true_y, pred_y_test)
         print(report)

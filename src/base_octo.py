@@ -1,3 +1,4 @@
+import re
 import pandas as pd
 import argparse
 import numpy as np
@@ -8,6 +9,16 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import classification_report
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 class BaselineClassifier():
     """
@@ -47,16 +58,30 @@ class BaselineClassifier():
         report = classification_report(true_y, pred_y)
         return report
 
+def make_prediction(raw_text, classifier, correct):
+    sentence = dad.preprocess_sentence(raw_text)
+    processed_sentence = classifier.vectorize(sentence)
+    raw_prediction = classifier.classifier.predict(processed_sentence)[0]
+    prediction = "real news!" if raw_prediction == 0 else "fake news!"
+    color = bcolors.OKGREEN if raw_prediction == 0 else bcolors.FAIL
+    print(f"'{raw_text}' is {color}{prediction}{bcolors.ENDC} and should be {bcolors.OKCYAN}{correct}{bcolors.ENDC}")
+
 def main(args):
     # Have dad load and preprocess data
     data = dad.load_data()
     X_train, X_test, y_train, y_test = dad.preprocess_data(data)
-
     # Build Classifier and evaluate
     classifier = BaselineClassifier(X_train, X_test, y_train, y_test, args.solver, args.analyzer)
+
+    make_prediction("The libertarian party is disbanding, in favor of starting an ant farm in Wisconsin", classifier)
+    make_prediction("New discovery shows that your liver is filled with microplastics", classifier)
+    make_prediction("Police in Paris ticketed protesters for carrying the French flag and saying the word 'freedom.'", classifier)
+    make_prediction("ohns Hopkins University research shows that someone can 'be vaccinated with a PCR swab test without knowing.'", classifier)
+    make_prediction("STEVEN DONZIGER WALKS FREE AFTER 993 DAYS OF ‘COMPLETELY UNJUST’ DETENTION", classifier)
+
     # print('Evaluation Time!')
     report = classifier.evaluate()
-    print(report)
+    # print(report)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
