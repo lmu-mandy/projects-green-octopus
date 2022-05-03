@@ -65,7 +65,7 @@ class BaselineClassifier():
 
             Params:
                 data (string): string to be vectorized
-            
+
             Returns:
                 <undef> (vectorizer obj): count vectorizered representation of the string
         """
@@ -99,11 +99,12 @@ def main(args):
     # Build Classifier and evaluate
     classifier = BaselineClassifier(X_train, X_test, y_train, y_test, args.solver, args.analyzer)
 
-    make_prediction("The libertarian party is disbanding, in favor of starting an ant farm in Wisconsin", classifier)
-    make_prediction("New discovery shows that your liver is filled with microplastics", classifier)
-    make_prediction("Police in Paris ticketed protesters for carrying the French flag and saying the word 'freedom.'", classifier)
-    make_prediction("ohns Hopkins University research shows that someone can 'be vaccinated with a PCR swab test without knowing.'", classifier)
-    make_prediction("STEVEN DONZIGER WALKS FREE AFTER 993 DAYS OF ‘COMPLETELY UNJUST’ DETENTION", classifier)
+    make_prediction("The libertarian party is disbanding, in favor of starting an ant farm in Wisconsin", classifier, False)
+    make_prediction("New discovery shows that your liver is filled with microplastics", classifier, False)
+    make_prediction("Police in Paris ticketed protesters for carrying the French flag and saying the word 'freedom.'", classifier, False)
+    make_prediction("Johns Hopkins University research shows that someone can 'be vaccinated with a PCR swab test without knowing.'", classifier, False)
+    make_prediction("STEVEN DONZIGER WALKS FREE AFTER 993 DAYS OF ‘COMPLETELY UNJUST’ DETENTION", classifier, True)
+    make_prediction("Fact Check-Paris has not introduced fines for holding the French flag", classifier, True)
 
     # print('Evaluation Time!')
     report = classifier.evaluate()
