@@ -106,9 +106,9 @@ def main(args):
     make_prediction("STEVEN DONZIGER WALKS FREE AFTER 993 DAYS OF ‘COMPLETELY UNJUST’ DETENTION", classifier, True)
     make_prediction("Fact Check-Paris has not introduced fines for holding the French flag", classifier, True)
 
-    # print('Evaluation Time!')
+    print('Evaluation Time!')
     report = classifier.evaluate()
-    # print(report)
+    print(report)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
